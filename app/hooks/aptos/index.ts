@@ -155,6 +155,9 @@ export const useBuyNFT = () => {
       queryClient.invalidateQueries({
         queryKey: ["ownerNFT"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["nfts"],
+      });
     },
   });
 };
