@@ -31,7 +31,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import { useMint } from "@/app/hooks/aptos";
+import { useMintAny } from "@/app/hooks/aptos";
 import { useUploadFile } from "@/app/hooks";
 import { env } from "@/app/config";
 import { match } from "ts-pattern";
@@ -76,7 +76,7 @@ export const MintNFTDialog = ({ children }: { children: React.ReactNode }) => {
       rarity: "Common",
     },
   });
-  const mint = useMint();
+  const mint = useMintAny();
   const upload = useUploadFile();
 
   function onSubmit(values: z.infer<typeof formSchema>) {

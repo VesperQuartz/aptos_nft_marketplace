@@ -35,7 +35,9 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
 
 
         // TODO# 5: Set Marketplace Fee
-                const MARKETPLACE_FEE_PERCENT: u64 = 2; // 2% fee
+        const MARKETPLACE_FEE_PERCENT: u64 = 2; // 2% fee
+
+        const MINTING_FEE: u64 = 1000000;
 
 
         // TODO# 6: Initialize Marketplace
@@ -56,21 +58,35 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
 
         // TODO# 8: Mint New NFT
         public entry fun mint_nft(account: &signer, name: vector<u8>, description: vector<u8>, uri: vector<u8>, rarity: u8) acquires Marketplace {
+
             let marketplace = borrow_global_mut<Marketplace>(signer::address_of(account));
+
             let nft_id = vector::length(&marketplace.nfts);
 
+
             let new_nft = NFT {
+
                 id: nft_id,
+
                 owner: signer::address_of(account),
+
                 name,
+
                 description,
+
                 uri,
+
                 price: 0,
+
                 for_sale: false,
+
                 rarity
+
             };
 
+
             vector::push_back(&mut marketplace.nfts, new_nft);
+
         }
 
 
@@ -226,7 +242,6 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
             if (a < b) { a } else { b }
         }
 
-
         // TODO# 20: Retrieve NFTs by Rarity
         // New function to retrieve NFTs by rarity
         #[view]
@@ -245,6 +260,46 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
             };
 
             nft_ids
+        }
+
+
+        // Add new mint_nft_any function
+        public entry fun mint_nft_any(
+            account: &signer,
+            marketplace_addr: address,
+            name: vector<u8>,
+            description: vector<u8>,
+            uri: vector<u8>,
+            rarity: u8
+        ) acquires Marketplace {
+            // Get reference to the marketplace using provided marketplace address
+            let marketplace = borrow_global_mut<Marketplace>(marketplace_addr);
+
+            // Generate new NFT ID
+            let nft_id = vector::length(&marketplace.nfts);
+
+            // Create new NFT with minter as owner
+            let new_nft = NFT {
+                id: nft_id,
+                owner: signer::address_of(account),
+                name,
+                description,
+                uri,
+                price: 0,
+                for_sale: false,
+                rarity
+            };
+
+            if (MINTING_FEE > 0) {
+                coin::transfer<aptos_coin::AptosCoin>(
+                    account,
+                    marketplace_addr,
+                    MINTING_FEE
+                );
+            };
+
+            // Add NFT to marketplace collection
+            vector::push_back(&mut marketplace.nfts, new_nft);
         }
 
     }

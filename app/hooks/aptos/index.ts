@@ -78,6 +78,73 @@ export const useMint = () => {
   });
 };
 
+export const useMintAny = () => {
+  const { signAndSubmitTransaction, account } = useWallet();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["mint"],
+    mutationFn: async ({
+      name,
+      description,
+      uri,
+      rarity,
+      ownerAddress,
+    }: {
+      name: string;
+      ownerAddress: string;
+      description: string;
+      uri: string;
+      rarity: number;
+    }) => {
+      const payload = {
+        name: Array.from(new TextEncoder().encode(name)),
+        description: Array.from(new TextEncoder().encode(description)),
+        uri: Array.from(new TextEncoder().encode(uri)),
+        rarity: rarity,
+      };
+      const mintFnPayload = {
+        function:
+          `${ownerAddress}::NFTMarketplace::mint_nft_any` as `${string}::${string}::${string}`,
+        functionArguments: [
+          ownerAddress,
+          payload.name,
+          payload.description,
+          payload.uri,
+          rarity,
+        ],
+      };
+
+      const [error, response] = await to(
+        signAndSubmitTransaction({
+          sender: account?.address,
+          data: mintFnPayload,
+        }),
+      );
+      if (error) {
+        throw error;
+      }
+      const [hashError, hash] = await to(
+        aptos.waitForTransaction({
+          transactionHash: response.hash,
+        }),
+      );
+      if (hashError) {
+        throw hashError;
+      }
+      console.log(hash);
+      return hash;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["nfts"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["ownerNFT"],
+      });
+    },
+  });
+};
+
 export const useGetOwnerNFT = () => {
   const { account } = useWallet();
   return useQuery({
