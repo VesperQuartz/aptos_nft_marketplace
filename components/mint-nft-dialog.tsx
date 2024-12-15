@@ -103,9 +103,6 @@ export const MintNFTDialog = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  console.log("upload", upload.data);
-  console.log("mint", mint.data);
-  console.log("mint", mint.error);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
