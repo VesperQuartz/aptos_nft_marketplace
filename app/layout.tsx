@@ -1,6 +1,12 @@
+import React from "react";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { WalletProvider } from "./providers/wallet-provider";
+import { Navbar } from "@/components/navbar";
+import { AsyncProvider } from "./providers/query-provider";
+import { BarProviders } from "./providers/loader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +29,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AsyncProvider>
+          <WalletProvider>
+            <NuqsAdapter>
+              <BarProviders>
+                <Navbar />
+                {children}
+              </BarProviders>
+            </NuqsAdapter>
+          </WalletProvider>
+        </AsyncProvider>
       </body>
     </html>
   );
