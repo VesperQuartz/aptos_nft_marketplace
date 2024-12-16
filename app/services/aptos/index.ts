@@ -1,5 +1,6 @@
 import { aptos } from "@/lib/aptos";
 import { hexToUint8Array } from "@/lib/utils";
+import { AccountInfo } from "@aptos-labs/wallet-adapter-react";
 import { to } from "await-to-ts";
 
 export type NFT = {
@@ -97,4 +98,21 @@ export const getOwnerNFT = async ({
     }),
   );
   return nfts;
+};
+
+export const getBalance = async (account: AccountInfo) => {
+  const resources = await aptos.getAccountResources({
+    accountAddress: account.address,
+  });
+  const accountResource = resources.find(
+    (r) => r.type === "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
+  );
+
+  if (accountResource) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const balanceValue = (accountResource.data as any).coin.value;
+    return balanceValue ? parseInt(balanceValue) / 100000000 : 0;
+  } else {
+    return 0;
+  }
 };

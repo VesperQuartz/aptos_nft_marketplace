@@ -1,3 +1,4 @@
+import React from "react";
 import { NFT } from "@/app/services/aptos";
 import { match } from "ts-pattern";
 import { Button } from "@/components/ui/button";
@@ -7,13 +8,15 @@ import { usePathname } from "next/navigation";
 import { SellNFTDialog } from "./sell-nft-dialog";
 import { useBuyNFT } from "@/app/hooks/aptos";
 import { Loader2 } from "lucide-react";
+import { TransferNFTDialog } from "./transfer-nft-dialog";
 
 interface NFTCardProps {
   nft: NFT;
-  actionText: string;
+  actionText?: string;
+  actionText2?: string;
 }
 
-export function NFTCard({ nft, actionText }: NFTCardProps) {
+export function NFTCard({ nft, actionText, actionText2 }: NFTCardProps) {
   console.log("nft-card", nft);
   const pathname = usePathname();
   const buy = useBuyNFT();
@@ -73,9 +76,18 @@ export function NFTCard({ nft, actionText }: NFTCardProps) {
             </Button>
           ))
           .with("/collection", () => (
-            <Button key={crypto.randomUUID()} className="w-full" asChild>
-              <SellNFTDialog id={nft.id}>{actionText}</SellNFTDialog>
-            </Button>
+            <React.Fragment key={crypto.randomUUID()}>
+              <div className="flex gap-4">
+                <Button className="w-full" asChild>
+                  <SellNFTDialog id={nft.id}>{actionText}</SellNFTDialog>
+                </Button>
+                <Button className="w-full" asChild>
+                  <TransferNFTDialog id={nft.id.toString()}>
+                    {actionText2}
+                  </TransferNFTDialog>
+                </Button>
+              </div>
+            </React.Fragment>
           ))
           .otherwise(() => null)}
       </div>

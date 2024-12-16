@@ -23,35 +23,34 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useSellNFT } from "@/app/hooks/aptos";
+import { useTransferNFT } from "@/app/hooks/aptos";
 const formSchema = z.object({
-  price: z.coerce.number().transform((x) => x * 100000000),
+  address: z.string(),
 });
 
-export const SellNFTDialog = ({
+export const TransferNFTDialog = ({
   children,
   id,
 }: {
   children: React.ReactNode;
-  id: number;
+  id: string;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: 0,
+      address: "",
     },
   });
 
-  const sell = useSellNFT();
+  const transfer = useTransferNFT();
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("sell-dialog", values);
-    sell.mutate({ id: id.toString(), price: values.price.toString() });
+    transfer.mutate({ id, address: values.address });
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{children}</Button>
+        <Button variant={"secondary"}>{children}</Button>
       </DialogTrigger>
       <DialogContent className="h-[400px] overflow-y-scroll bg-gray-900 text-white">
         <DialogHeader>
@@ -61,34 +60,37 @@ export const SellNFTDialog = ({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="price"
+              name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price (APT)</FormLabel>
+                  <FormLabel>Address</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
+                      type="text"
+                      placeholder="0x..."
                       {...field}
-                      onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value))
-                      }
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                   <FormDescription>
-                    Set the price for your NFT in APT.
+                    NFT address of the recipient
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={sell.isPending} className="w-full">
-              {sell.isPending ? (
+            <Button
+              type="submit"
+              disabled={transfer.isPending}
+              className="w-full"
+            >
+              {transfer.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Selling...
+                  Transfering...
                 </>
               ) : (
-                "Sell NFT"
+                "Gift NFT"
               )}
             </Button>
           </form>

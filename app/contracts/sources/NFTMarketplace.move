@@ -46,6 +46,7 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
                 nfts: vector::empty<NFT>()
             };
             move_to(account, marketplace);
+            
         }
 
 
@@ -171,18 +172,25 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
 
         // TODO# 15: Transfer Ownership
         public entry fun transfer_ownership(account: &signer, marketplace_addr: address, nft_id: u64, new_owner: address) acquires Marketplace {
+
             let marketplace = borrow_global_mut<Marketplace>(marketplace_addr);
+
             let nft_ref = vector::borrow_mut(&mut marketplace.nfts, nft_id);
 
+
             assert!(nft_ref.owner == signer::address_of(account), 300); // Caller is not the owner
+
             assert!(nft_ref.owner != new_owner, 301); // Prevent transfer to the same owner
 
+
             // Update NFT ownership and reset its for_sale status and price
+
             nft_ref.owner = new_owner;
+
             nft_ref.for_sale = false;
+
             nft_ref.price = 0;
         }
-
 
         // TODO# 16: Retrieve NFT Owner
         #[view]
@@ -301,6 +309,5 @@ address 0x3effc8166ac9d9e0d1d4fa8ff693f9f73c62154931fbe252172975951eef617f {
             // Add NFT to marketplace collection
             vector::push_back(&mut marketplace.nfts, new_nft);
         }
-
     }
 }

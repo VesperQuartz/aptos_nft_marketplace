@@ -11,7 +11,7 @@ export function UserCollection() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {nfts.data?.map((nft) => (
-        <NFTCard key={nft.id} nft={nft} actionText="Sell" />
+        <NFTCard key={nft.id} nft={nft} actionText="Sell" actionText2="Gift" />
       ))}
     </div>
   );

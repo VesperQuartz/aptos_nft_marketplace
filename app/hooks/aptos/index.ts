@@ -1,7 +1,7 @@
 import { env } from "@/app/config";
-import { fetchAllNFT, getOwnerNFT } from "@/app/services/aptos";
+import { fetchAllNFT, getBalance, getOwnerNFT } from "@/app/services/aptos";
 import { aptos } from "@/lib/aptos";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useWallet, AccountInfo } from "@aptos-labs/wallet-adapter-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import to from "await-to-ts";
 
@@ -9,6 +9,7 @@ export const useGetAllNFT = () => {
   return useQuery({
     queryKey: ["nfts"],
     queryFn: () => fetchAllNFT({ marketAddress: env.ownerAddress }),
+    select: (data) => data.filter((x) => x.price !== 0),
   });
 };
 
@@ -226,5 +227,48 @@ export const useBuyNFT = () => {
         queryKey: ["nfts"],
       });
     },
+  });
+};
+
+export const useTransferNFT = () => {
+  const { signAndSubmitTransaction, account } = useWallet();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["transferNFT"],
+    mutationFn: async ({ address, id }: { address: string; id: string }) => {
+      const [error, response] = await to(
+        signAndSubmitTransaction({
+          sender: account?.address,
+          data: {
+            function:
+              `${env.ownerAddress}::NFTMarketplace::transfer_ownership` as `${string}::${string}::${string}`,
+            functionArguments: [env.ownerAddress, id, address],
+          },
+        }),
+      );
+      if (error) {
+        throw error;
+      }
+      const hash = await aptos.waitForTransaction({
+        transactionHash: response.hash,
+      });
+      return hash;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["ownerNFT"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["nfts"],
+      });
+    },
+  });
+};
+
+export const useGetBalance = (account: AccountInfo) => {
+  return useQuery({
+    queryKey: ["balance"],
+    queryFn: () => getBalance(account),
+    enabled: !!account?.address,
   });
 };
