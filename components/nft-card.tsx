@@ -9,6 +9,7 @@ import { SellNFTDialog } from "./sell-nft-dialog";
 import { useBuyNFT } from "@/app/hooks/aptos";
 import { Loader2 } from "lucide-react";
 import { TransferNFTDialog } from "./transfer-nft-dialog";
+import { Badge } from "./ui/badge";
 
 interface NFTCardProps {
   nft: NFT;
@@ -17,79 +18,94 @@ interface NFTCardProps {
 }
 
 export function NFTCard({ nft, actionText, actionText2 }: NFTCardProps) {
-  console.log("nft-card", nft);
   const pathname = usePathname();
   const buy = useBuyNFT();
-  const getRarityColor = (rarity: number) => {
+
+  const getRarityData = (rarity: number) => {
     return match(rarity)
-      .with(1, () => "text-gray-400")
-      .with(2, () => "text-green-400")
-      .with(3, () => "text-blue-400")
-      .with(4, () => "text-purple-400")
-      .otherwise(() => "text-white");
+      .with(1, () => ({ color: "text-gray-400", label: "Common" }))
+      .with(2, () => ({ color: "text-emerald-400", label: "Uncommon" }))
+      .with(3, () => ({ color: "text-blue-400", label: "Rare" }))
+      .with(4, () => ({ color: "text-purple-400", label: "Epic" }))
+      .otherwise(() => ({ color: "text-white", label: "" }));
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
-      <Image
-        width={500}
-        height={500}
-        src={nft.uri}
-        alt={nft.name}
-        className="w-full h-64 object-cover"
-      />
-      <div className="p-4">
-        <h2 className="text-xl font-semibold mb-2">{nft.name}</h2>
-        <p className="text-gray-400 mb-2 text-sm">{nft.description}</p>
-        <p className="text-gray-400 mb-2">
-          Created by {abbreviateAddress(nft.owner)}
-        </p>
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-lg font-bold">{nft.price} APT</span>
-          <span className={`font-semibold ${getRarityColor(nft.rarity)}`}>
-            {match(nft.rarity)
-              .with(1, () => "Common")
-              .with(2, () => "Uncommon")
-              .with(3, () => "Rare")
-              .with(4, () => "Epic")
-              .otherwise(() => "")}
-          </span>
+    <div className="glass-card hover-glow transition-all duration-300 overflow-hidden">
+      <div className="relative group">
+        <Image
+          width={500}
+          height={500}
+          src={nft.uri}
+          alt={nft.name}
+          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+
+      <div className="p-6 space-y-4">
+        <div className="flex justify-between items-start">
+          <h2 className="text-xl font-bold">{nft.name}</h2>
+          <Badge variant="outline" className={getRarityData(nft.rarity).color}>
+            {getRarityData(nft.rarity).label}
+          </Badge>
         </div>
+
+        <p className="text-gray-400 text-sm line-clamp-2">{nft.description}</p>
+
+        <div className="flex justify-between items-center">
+          <div className="space-y-1">
+            <p className="text-sm text-gray-400">Created by</p>
+            <p className="font-mono text-xs bg-gray-800 px-2 py-1 rounded-md">
+              {abbreviateAddress(nft.owner)}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-gray-400">Price</p>
+            <p className="text-xl font-bold text-purple-400">{nft.price} APT</p>
+          </div>
+        </div>
+
+        {/* Action buttons here - keeping existing logic */}
         {match(pathname)
           .with("/", () => (
             <Button
-              key={crypto.randomUUID()}
-              className="w-full"
-              disabled={buy.isPending}
+              className="w-full mt-4 bg-purple-600 hover:bg-purple-700"
               onClick={() =>
                 buy.mutate({
                   id: nft.id.toString(),
                   price: nft.price.toString(),
                 })
               }
+              disabled={buy.isPending}
             >
               {buy.isPending ? (
-                <Loader2 className="animate-spin" />
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Buying...
+                </>
               ) : (
                 actionText
               )}
             </Button>
           ))
-          .with("/collection", () => (
-            <React.Fragment key={crypto.randomUUID()}>
-              <div className="flex gap-4">
-                <Button className="w-full" asChild>
-                  <SellNFTDialog id={nft.id}>{actionText}</SellNFTDialog>
+          .otherwise(() => (
+            <div className="flex gap-2 mt-4">
+              <SellNFTDialog id={nft.id}>
+                <Button className="flex-1 bg-purple-600 hover:bg-purple-700">
+                  {actionText}
                 </Button>
-                <Button className="w-full" asChild>
-                  <TransferNFTDialog id={nft.id.toString()}>
-                    {actionText2}
-                  </TransferNFTDialog>
+              </SellNFTDialog>
+              <TransferNFTDialog id={nft.id}>
+                <Button
+                  variant="outline"
+                  className="flex-1 border-purple-600 text-purple-400 hover:bg-purple-600/10"
+                >
+                  {actionText2}
                 </Button>
-              </div>
-            </React.Fragment>
-          ))
-          .otherwise(() => null)}
+              </TransferNFTDialog>
+            </div>
+          ))}
       </div>
     </div>
   );
