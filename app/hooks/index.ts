@@ -3,7 +3,7 @@ import { uploadFile } from "../services";
 
 export const useUploadFile = () => {
   return useMutation({
-    mutationKey: ["upload"],
+        mutationKey: ["upload"],
     mutationFn: ({ filename, file }: { filename: string; file: File }) =>
       uploadFile({ filename, file }),
   });
