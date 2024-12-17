@@ -3,15 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { WalletSelector } from "@/app/components/wallet-selector";
 import { MintNFTDialog } from "./mint-nft-dialog";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useGetBalance } from "@/app/hooks/aptos";
-import { HexGrid } from "./hex-grid";
 import { WalletBalance } from "./wallet-balance";
 
 export const Navbar = () => {
-  const { connected, account } = useWallet();
-  const balance = useGetBalance(account!);
-
   return (
     <header className="relative z-10 border-b border-white/10 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-4">
