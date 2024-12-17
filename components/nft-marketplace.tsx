@@ -10,10 +10,10 @@ import { match } from "ts-pattern";
 
 export function NFTMarketplace() {
   const nfts = useGetAllNFT();
-        const [filters] = useQueryStates(
+  const [filters] = useQueryStates(
     {
       rarity: FilterSchema.shape.rarity.transform((v) =>
-        typeof v === "string" ? Number(v) : "" 
+        typeof v === "string" ? Number(v) : "",
       ),
       search: FilterSchema.shape.search,
       sort: FilterSchema.shape.sort,
@@ -21,7 +21,7 @@ export function NFTMarketplace() {
     {
       history: "push",
       clearOnDefault: true,
-    }
+    },
   );
 
   const filteredNFTs = nfts.data?.filter((nft) => {

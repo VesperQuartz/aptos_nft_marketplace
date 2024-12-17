@@ -91,11 +91,12 @@ export function NFTCard({ nft, actionText, actionText2 }: NFTCardProps) {
           ))
           .otherwise(() => (
             <div className="flex gap-2 mt-4">
-              <SellNFTDialog id={nft.id}>
-                <Button className="flex-1 bg-purple-600 hover:bg-purple-700">
-                  {actionText}
-                </Button>
-              </SellNFTDialog>
+              <Button
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
+                asChild
+              >
+                <SellNFTDialog id={nft.id}>{actionText}</SellNFTDialog>
+              </Button>
               <TransferNFTDialog id={nft.id}>
                 <Button
                   variant="outline"

@@ -38,11 +38,9 @@ export const Navbar = () => {
               </Button>
             </Link>
             <WalletSelector />
-            <MintNFTDialog>
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                Mint NFT
-              </Button>
-            </MintNFTDialog>
+            <Button className="bg-purple-600 hover:bg-purple-700" asChild>
+              <MintNFTDialog>Mint NFT</MintNFTDialog>
+            </Button>
           </nav>
         </div>
       </div>
