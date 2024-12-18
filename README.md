@@ -7,6 +7,11 @@ live link: [marketplace](https://vercel.com/mrlectus-projects/aptos-nft-marketpl
 
 Building upon the foundational features of our initial NFT marketplace implementation, this enhanced version represents a significant evolution in digital asset trading on the Aptos blockchain. By introducing advanced capabilities, we have transformed the platform to provide a more robust, user-centric experience for creators and collectors.
 
+> [!IMPORTANT]
+>
+>  THIS PROJECT WAS DEPLOYED TO TESTNET
+>
+> 
 ## Feature Implementations
 
 1. Comprehensive NFT Gifting Mechanism
