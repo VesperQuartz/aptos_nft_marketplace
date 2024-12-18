@@ -235,7 +235,13 @@ export const useTransferNFT = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["transferNFT"],
-    mutationFn: async ({ address, id }: { address: string; id: string }) => {
+    mutationFn: async ({
+      address,
+      id,
+    }: {
+      address: string;
+      id: string | number;
+    }) => {
       const [error, response] = await to(
         signAndSubmitTransaction({
           sender: account?.address,

@@ -14,6 +14,8 @@ import { FilterSchema } from "@/app/types/filters";
 import { X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
+type Filter = "rarity" | "price_asc" | "price_desc" | null;
+
 export function FilterBar() {
   const [filters, setFilters] = useQueryStates(
     {
@@ -32,9 +34,9 @@ export function FilterBar() {
   const clearFilters = () => {
     setFilters(
       {
-        rarity: "",
-        search: "",
-        sort: "",
+        rarity: null,
+        search: null,
+        sort: null,
       },
       {
         clearOnDefault: true,
@@ -70,7 +72,7 @@ export function FilterBar() {
             onValueChange={(value) =>
               setFilters(
                 {
-                  sort: value || "",
+                  sort: (value as Filter) || null,
                 },
                 {
                   clearOnDefault: true,

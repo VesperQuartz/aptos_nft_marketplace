@@ -33,7 +33,7 @@ export const TransferNFTDialog = ({
   id,
 }: {
   children: React.ReactNode;
-  id: string;
+  id: string | number;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

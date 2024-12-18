@@ -97,14 +97,13 @@ export function NFTCard({ nft, actionText, actionText2 }: NFTCardProps) {
               >
                 <SellNFTDialog id={nft.id}>{actionText}</SellNFTDialog>
               </Button>
-              <TransferNFTDialog id={nft.id}>
-                <Button
-                  variant="outline"
-                  className="flex-1 border-purple-600 text-purple-400 hover:bg-purple-600/10"
-                >
-                  {actionText2}
-                </Button>
-              </TransferNFTDialog>
+              <Button
+                variant="outline"
+                className="flex-1 border-purple-600 text-purple-400 hover:bg-purple-600/10"
+                asChild
+              >
+                <TransferNFTDialog id={nft.id}>{actionText2}</TransferNFTDialog>
+              </Button>
             </div>
           ))}
       </div>
