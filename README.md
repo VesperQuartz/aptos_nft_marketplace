@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NFT MARKET PLACE (APTOS)
 
-## Getting Started
+## Introduction
 
-First, run the development server:
+Building upon the foundational features of our initial NFT marketplace implementation, this enhanced version represents a significant evolution in digital asset trading on the Aptos blockchain. By introducing advanced capabilities, we have transformed the platform to provide a more robust, user-centric experience for creators and collectors.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Feature Implementations
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Comprehensive NFT Gifting Mechanism
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*Technical Approach:*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Implemented secure, blockchain native NFT transfer functionality
+- Developed wallet to wallet transfer protocol ensuring complete transaction integrity
+- Created user interface for seamless gift selection and recipient address input
+- Integrated robust error handling and transaction confirmation processes
 
-## Learn More
+*Key Benefits:*
 
-To learn more about Next.js, take a look at the following resources:
+- Enables direct peer-to-peer NFT transfers
+- Reduces friction in sharing digital assets
+- Provides a native gifting experience within the Web3 ecosystem
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Advanced Filtering and Sorting System
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+*Technical Implementation:*
 
-## Deploy on Vercel
+- Multi dimensional filtering architecture supporting:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  - Precise price range selection
+  - Rarity-based categorization
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Created dynamic, responsive filtering mechanism
+
+*Core Capabilities:*
+
+- Enhanced NFT discovery experience
+- Granular search and exploration tools
+- Performance optimized filtering logic
+
+3. Universal Minting Platform
+
+*Technical Design:*
+
+- Removed traditional minting barriers
+- Developed inclusive, user friendly minting interface
+- Implemented robust smart contract logic for democratized NFT creation
+- Integrated seamless marketplace listing post-minting
+
+*Blockchain Considerations*
+
+- Built on Aptos blockchain for high-performance, secure transactions
+- Leveraged Move language for smart contract development
+- Ensured gas efficiency and optimal resource utilization
+
+*Technical Stack*
+
+- Blockchain: Aptos
+- Smart Contracts: Move
+- Frontend: React (Nextjs)
+- SDK: Aptos typescript sdk
+
+This implementation showcases innovative solutions to current Web3 marketplace limitations, focusing on user experience, accessibility, and advanced functionality.
