@@ -26,7 +26,6 @@ export function FilterBar() {
     {
       history: "push",
       clearOnDefault: true,
-      parse: true,
     },
   );
 
