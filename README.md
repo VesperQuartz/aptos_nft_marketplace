@@ -1,6 +1,9 @@
 # NFT MARKET PLACE (APTOS)
 
 ## Introduction
+[nft_market.webm](https://github.com/user-attachments/assets/c9bc0543-0bf1-4eb9-b4ae-2659e634457e)
+
+live link: [marketplace](https://vercel.com/mrlectus-projects/aptos-nft-marketplace)
 
 Building upon the foundational features of our initial NFT marketplace implementation, this enhanced version represents a significant evolution in digital asset trading on the Aptos blockchain. By introducing advanced capabilities, we have transformed the platform to provide a more robust, user-centric experience for creators and collectors.
 
